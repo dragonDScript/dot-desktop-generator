@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=dot-desktop-generator
+Exec=dot-desktop-generator
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

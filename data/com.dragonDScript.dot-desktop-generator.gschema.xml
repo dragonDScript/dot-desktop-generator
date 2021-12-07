@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="dot-desktop-generator">
+	<schema id="com.dragonDScript.dot-desktop-generator" path="/com/dragonDScript/dot-desktop-generator/">
+	</schema>
+</schemalist>

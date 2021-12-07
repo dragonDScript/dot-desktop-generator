@@ -1,0 +1,4 @@
+data/com.dragonDScript.dot-desktop-generator.desktop.in
+data/com.dragonDScript.dot-desktop-generator.appdata.xml.in
+data/com.dragonDScript.dot-desktop-generator.gschema.xml
+src/window.ui
