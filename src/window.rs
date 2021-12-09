@@ -28,37 +28,30 @@ impl Window {
             .expect("err: failed to find the btnSend object");
 
         btn_send.connect_clicked(move |btn_send| {
-            match title_entry.get_text() {
-                Some(gstr_title) => {
-                    let title: String = String::from(gstr_title);
+            let gstr_title = title_entry.get_text()
+                .expect("err: cannot get_title()");
+            let title: String = String::from(gstr_title);
 
-                    match bin_picker.get_title() {
-                        Some(gstr_bin) => {
-                            let bin = String::from(gstr_bin);
-                            // format
-                            let path = format!("/home/{}/.local/share/applications", env::var("USER").unwrap());
-                            let mut formatted: String = format!("[Desktop Entry]
+            let gstr_bin = bin_picker.get_title()
+                .expect("err: cannot get_title()");
+            let bin = String::from(gstr_bin);
+            // format
+            let path = format!("/home/{}/.local/share/applications", env::var("USER").unwrap());
+            let mut formatted: String = format!("[Desktop Entry]
 Version=1.0
 Type=Application
 Name={title}
 Exec={binary}", title=title, binary=bin);
-                            let path = Path::new(&path);
-                            let path = &path.join(format!("{}.desktop", title));
-                            match File::create(path) {
-                                Ok(mut file) => {
-                                    if img_picker.get_title().is_some() {
-                                        formatted = format!("{}{}", formatted, format!("\nIcon={}", img_picker.get_title().unwrap()));
-                                    }
-                                    file.write_all(formatted.as_bytes()).expect("err: failed to write to file");
-                                },
-                                Err(err) => println!("err: failed to create file {}", err)
-                            }
-                        }
-                        None => println!("err: cannot get_title()")
+            let path = Path::new(&path);
+            let path = &path.join(format!("{}.desktop", title));
+            match File::create(path) {
+                Ok(mut file) => {
+                    if img_picker.get_title().is_some() {
+                        formatted = format!("{}{}", formatted, format!("\nIcon={}", img_picker.get_title().unwrap()));
                     }
-
+                    file.write_all(formatted.as_bytes()).expect("err: failed to write to file");
                 },
-                None => println!("err: cannot get_text()"),
+                Err(err) => println!("err: failed to create file {}", err)
             }
         });
 
