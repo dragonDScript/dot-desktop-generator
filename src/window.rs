@@ -1,3 +1,4 @@
+use glib::GString;
 use std::path::Path;
 use std::env;
 use std::io::Write;
@@ -17,6 +18,9 @@ impl Window {
         let title_entry: gtk::Entry = builder
             .get_object("titleInput")
             .expect("Failed to find the titleInput object");
+        let comment_entry: gtk::Entry = builder
+            .get_object("commentInput")
+            .expect("Failed to find the commentInput object");
         let img_picker: gtk::FileChooserButton = builder
             .get_object("imgPicker")
             .expect("err: failed to find the imgPicker object");
@@ -28,26 +32,34 @@ impl Window {
             .expect("err: failed to find the btnSend object");
 
         btn_send.connect_clicked(move |btn_send| {
-            let gstr_title = title_entry.get_text()
-                .expect("err: cannot get_title()");
-            let title: String = String::from(gstr_title);
+            let title = title_entry.get_text()
+                .expect("err: cannot get_text()");
 
-            let gstr_bin = bin_picker.get_title()
-                .expect("err: cannot get_title()");
-            let bin = String::from(gstr_bin);
+            let bin = bin_picker.get_filename().unwrap();
+
             // format
             let path = format!("/home/{}/.local/share/applications", env::var("USER").unwrap());
             let mut formatted: String = format!("[Desktop Entry]
 Version=1.0
 Type=Application
 Name={title}
-Exec={binary}", title=title, binary=bin);
+Exec={binary}", title=title, binary=bin.to_string_lossy());
             let path = Path::new(&path);
             let path = &path.join(format!("{}.desktop", title));
             match File::create(path) {
                 Ok(mut file) => {
-                    if img_picker.get_title().is_some() {
-                        formatted = format!("{}{}", formatted, format!("\nIcon={}", img_picker.get_title().unwrap()));
+                    match img_picker.get_current_folder() {
+                        Some (img) => {
+                            formatted = format!("{}{}", formatted, format!("\nIcon={}", img.to_string_lossy()));
+                        }
+                        None => {}
+                    }
+                    match comment_entry.get_text() {
+                        Some (cmt) => {
+                            if cmt == "" { return }
+                            formatted = format!("{}{}", formatted, format!("\nComment={}", cmt));
+                        }
+                        None => {}
                     }
                     file.write_all(formatted.as_bytes()).expect("err: failed to write to file");
                 },
