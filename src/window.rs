@@ -56,8 +56,9 @@ Exec={binary}", title=title, binary=bin.to_string_lossy());
                     }
                     match comment_entry.get_text() {
                         Some (cmt) => {
-                            if cmt == "" { return }
-                            formatted = format!("{}{}", formatted, format!("\nComment={}", cmt));
+                            if cmt != "" {
+                                formatted = format!("{}{}", formatted, format!("\nComment={}", cmt));
+                            }
                         }
                         None => {}
                     }
