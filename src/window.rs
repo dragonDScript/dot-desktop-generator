@@ -1,4 +1,3 @@
-use glib::GString;
 use std::path::Path;
 use std::env;
 use std::io::Write;
