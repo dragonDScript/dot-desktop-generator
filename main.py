@@ -7,7 +7,7 @@ def write_desktop_file(**kwargs):
     binary = kwargs["binary"]
     image = kwargs["image"]
     comment = kwargs["comment"]
-    st = f"[Desktop entry]\nType=Application\nExec={binary}\nIcon={image}\nName={title}\nnComment={comment}"
+    st = f"[Desktop entry]\nType=Application\nExec={binary}\nIcon={image}\nName={title}\nComment={comment}"
     with open(path.join(path.expanduser("~"), ".local", "share", "applications", f"{title}.desktop"), "w") as f:
         f.write(st)
         f.close()
